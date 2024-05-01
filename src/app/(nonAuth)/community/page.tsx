@@ -10,6 +10,7 @@ import { paging, resetPagination } from '@/util/util'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
+// 커뮤니티 리스트 페이지
 const Community = () => {
   const [isSort, setIsSort] = useState(true)
   const setCurrentPageData = usePaginationStore(
@@ -21,6 +22,7 @@ const Community = () => {
   const { communityList, isLoading, isError, refetch } =
     getCommunityListInCommunity(isSort)
 
+  // refetch 쿼리를 재요청하는 함수, state의 상태가 바뀔때마다 서버에 좋아요, 최신순 기준으로 orderBy로 정렬해서 요청함 / true => 최신순
   useEffect(() => {
     refetch()
     resetPagination(setCurrentPageData)

@@ -26,6 +26,8 @@ const RandomMusicList = () => {
     queryKey: [GENRE_MUSIC_QUERY_KEY.GET_MAIN_GENRE_MUSIC],
   })
 
+  // 리렌더가 일어나거나 음악 데이터가 변경될 시 리렌더되며 새 데이터를 가져온다
+  // set 객체를 담은 변수를 활용하여 Math.random에서 중복되는 값을 없앤 데이터를 랜덤으로 추출하여 보여준다
   useEffect(() => {
     if (data) {
       const randomIndex = new Set<number>()

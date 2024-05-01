@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation'
 import Swal from 'sweetalert2'
 import { ADD_CURRENT_MUSIC_SHADOW } from '../communityDetail/communityCss'
 
+// 검색 결과가 없을 경우 랜덤 음악이 나옵니다
 const NoSearchResultItem = ({ item }: { item: GenreMusicInfo }) => {
   const queryClient = useQueryClient()
   const router = useRouter()

@@ -6,6 +6,7 @@ import { onDateHandler } from '@/util/util'
 import Image from 'next/image'
 import Link from 'next/link'
 
+// 커뮤니티 리스트 데이터 - 최신순, 좋아요 정렬된 상태
 const CommunityListData = ({ item }: { item: CommunityType }) => {
   const keys = Object.keys(item.comment)
   const numKeys = keys.length

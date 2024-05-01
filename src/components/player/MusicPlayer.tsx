@@ -19,6 +19,7 @@ import Swal from 'sweetalert2'
 import CurrentMusicList from './CurrentMusicList'
 import Player from './Player'
 
+// 플레이어 최상위 컴포넌트
 const MusicPlayer = () => {
   const [currentPlaying, setCurrentPlaying] =
     useState<CurrentPlayListType | null>(null)
@@ -31,6 +32,9 @@ const MusicPlayer = () => {
   const { data: userSessionInfo } = useSession()
   const uid = userSessionInfo?.user.uid as string
 
+  // 로컬스토리지와 쥬스탄드에 저장된 현재 플레이 리스트
+  // 쥬스탄드 스테이트에 저장된 값이 없을때만 DB와 통신하며 이후 로컬스토리지에 저장된 값으로만 관리된다
+  // 추가, 삭제 시 서버 데이터와 로컬스토리지에 저장된 데이터를 비교 후 로컬스토리지 데이터를 수정해준다(CurrentMusicList 컴포넌트 참고)
   const { customListData } = useCustomListMusicStore()
   const { customPlayList } = customListData
 
@@ -90,10 +94,14 @@ const MusicPlayer = () => {
     })
   }
 
+  // 플레이어 이전 버튼을 누를경우 isRandom 스테이트가 참일경우 Math.random을 이용해 랜덤재생된다
+  // 플리 인덱스가 0과 같을경우 플리리스트-1로 이전 노래를 재생하게된다
   const onPreviousHandler = () => {
     if (!isRandom) {
       if (musicIndex === 0) {
         setMusicIndex(customPlayList.length - 1)
+
+        // 현재 재생중인 음악 정보를 담은 스테이트. 플레이리스트에 인덱스 기준으로 현재 음악 정보를 담아주고있다
         setCurrentPlaying(customPlayList[musicIndex] as CurrentPlayListType)
       } else {
         setMusicIndex((prev) => prev - 1)
@@ -107,6 +115,7 @@ const MusicPlayer = () => {
       )
     }
   }
+  // 플레이어 다음 버튼을 누르거나, 현재 노래가 끝날경우 다음 노래로 넘어간다
   const onNextTrackHandler = () => {
     if (!isRandom) {
       if (musicIndex === customPlayList.length - 1) {
@@ -129,6 +138,7 @@ const MusicPlayer = () => {
     }
   }
 
+  // 플레이 리스트 체크박스를 클릭하면 음악 id가 담기고  마플리 또는 삭제 이벤트에 사용한다
   const onChangeCheckMusicHandler = (checked: boolean, id: string) => {
     if (checked) {
       setCheckedList((prev) => [...prev, id])
@@ -138,6 +148,8 @@ const MusicPlayer = () => {
     }
   }
 
+  // 삭제 이벤트 체크박스에 담긴 id값과, 서버에 현재플리 테이블에 저장된 id값을 비교해 같지 않은 데이터만 새 배열로 반환하여 업데이트해준다
+  // 왜? 배열 형태니까 배열에서 같지않은 데이터만 지우고 새 배열로 업데이트
   const onDeleteCurrentMusicHandler = async () => {
     Swal.fire({
       title: '선택한 노래를 삭제하시겠습니까?',
@@ -181,6 +193,9 @@ const MusicPlayer = () => {
     })
   }
 
+  // 마플리 추가 이벤트
+  // 체크박스에 담긴 배열과, 마플리에 담긴 음악ID배열을 every로 비교 후 같지 않은 데이터 추출해서 기존 마플리 배열 뒤에 추가해서 업데이트해준다
+  // every는 &&, some은 || 로 생각하면된다
   const onInsertMyPlayListHandler = async () => {
     if (checkedList.length === 0) {
       Swal.fire({

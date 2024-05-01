@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation'
 import Swal from 'sweetalert2'
 import { ADD_CURRENT_MUSIC_SHADOW } from '../communityDetail/communityCss'
 
+// 음악 검색 결과 컴포넌트, 페이지네이션 처리된 변수가 프롭스로 들어간다
 const SearchedMusicData = ({
   currentItems,
 }: {
@@ -63,6 +64,7 @@ const SearchedMusicData = ({
     },
   })
 
+  // 현재 플레이리스트 추가 함수.
   const onClickAddCurrentMusicHandler = (musicId: string) => {
     if (uid === '' || !uid) {
       Swal.fire({
@@ -75,7 +77,8 @@ const SearchedMusicData = ({
       router.replace('/login')
       return
     }
-
+    // playListCurrent가 현재 플레이리스트. 테이블에 현재 로그인된 유저의 음악 ID값이 담긴 배열 컬럼과 선택한 음악 ID와 find로 비교 후 추가 또는 반환한다
+    // 최초 현재 플레이 리스트에 등록시에만 insertMutation을 호출하고 그 외에는 updateMutation을 사용한다
     if (playListCurrent && playListCurrent.length > 0) {
       const currentList = playListCurrent[0].currentMusicIds
 
@@ -105,6 +108,7 @@ const SearchedMusicData = ({
     })
   }
 
+  // 마이플레이 리스트 추가 함수
   const onClickAddMyPlayListHandler = async (musicId: string) => {
     if (uid === '' || !uid) {
       Swal.fire({
@@ -129,6 +133,8 @@ const SearchedMusicData = ({
       color: '#ffffff',
     }).then((result) => {
       if (result.isConfirmed) {
+        // 마이플레이리스트 테이블에 현재 로그인된 유저의 음악 ID값이 담긴 배열 컬럼과 선택한 음악 ID와 find로 비교 후 추가 또는 반환한다
+        // 최초  마이플레이 리스트에 등록시에만 insertMutation을 호출하고 그 외에는 updateMutation을 사용한다
         if (myPlayList && myPlayList.length > 0) {
           const myList = myPlayList[0].myMusicIds
           if (myList.find((el) => el === musicId)) {

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
+// 커뮤니티 리스트 sort state 정렬 버튼
 const CommunityListSort = ({
   isSort,
   setIsSort,

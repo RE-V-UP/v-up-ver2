@@ -22,6 +22,7 @@ import MyPauseIcon from './playerIcons/MyPauseIcon'
 import MyPlayIcon from './playerIcons/MyPlayIcon'
 import MyPreviousIcon from './playerIcons/MyPreviousIcon'
 
+// 현재 플레이 컴포넌트
 const Player = ({
   currentPlaying,
   setCurrentPlaying,
@@ -37,6 +38,8 @@ const Player = ({
   const { customListData } = useCustomListMusicStore()
   const { customPlayList } = customListData
 
+  // 현재 플레이어 리스트가 있으면 첫번째 인덱스를 현재 플레이 스테이트에 담아주고
+  // 플레이 리스트가 없으면 현재 플레이중인음악도 삭제함으로 현재 재생곡 삭제 시 다음곡으로 넘어감
   useEffect(() => {
     if (!currentPlaying && customPlayList.length > 0) {
       setCurrentPlaying(customPlayList[0])
@@ -45,6 +48,7 @@ const Player = ({
     }
   }, [musicIndex, customPlayList, currentPlaying])
 
+  // 플레이어 버튼 커스텀을 위한 컴포넌트 공식문서 기반으로 컴포넌트에 SVG를 담아 플레이어 라이브러리 속성에 커스텀 아이콘으로 넣어줌
   const customIcons = {
     play: <MyPlayIcon />,
     pause: <MyPauseIcon />,
@@ -55,6 +59,7 @@ const Player = ({
     progressJump: <FaForward />,
   }
 
+  // LP 돌아감 + 그림자 애니메이션을위한REF
   const imageRef = useRef<HTMLImageElement>(null)
 
   const onStartAnimation = () => {
@@ -71,11 +76,13 @@ const Player = ({
     }
   }
 
+  // 플레이어 라이브러이에 플레이 속성을 이용해 음악 플레이 시 애니메이션 적용
   const onplayHandler = (arg: any) => {
     setCurrentPlaying(arg)
     onStartAnimation()
   }
 
+  // 플레이어 라이브러이에 퍼즈(일시정지) 속성을 이용해 음악 플레이 시 애니메이션 적용
   const onPauseHandler = () => {
     onStopAnimation()
   }

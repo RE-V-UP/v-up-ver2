@@ -12,6 +12,7 @@ import { FormEvent, useRef } from 'react'
 import Swal from 'sweetalert2'
 import { OPEN_ANOTHER_SHADOW } from '../login/loginCss'
 
+// 검색창
 const SearchForm = () => {
   const {
     form: keywordInput,
@@ -21,6 +22,7 @@ const SearchForm = () => {
     keyword: '',
     selectedTabs: 'musicInfo',
   })
+  // 검색 키워드 와 셀렉박스를 쥬스탄드에 저장함으로 페이지에서 같은 값을 공유할 수 있다
   const { keyword, selectedTabs } = keywordInput
   const searched = useSearchedKeywordStore((state) => state.searched)
   const setCurrentPageData = usePaginationStore(
@@ -30,6 +32,7 @@ const SearchForm = () => {
   const router = useRouter()
   const keywordRef = useRef<HTMLInputElement>(null)
 
+  // 검색 버튼을 누르면 서버에서 해당 데이터를 검색
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!keyword) {
@@ -42,6 +45,7 @@ const SearchForm = () => {
       return keywordRef.current?.focus()
     }
 
+    // 쥬스탄드에 검색 키워드와 selectedTabs 저장, 검색할때마다 현재 페이지를 1페이지로 초기화해주는 함수를 연결함으로 이전페이지 검색도 가능하다
     searched(keyword, selectedTabs)
     resetPagination(setCurrentPageData)
     router.push('/search')
